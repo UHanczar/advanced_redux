@@ -6,4 +6,4 @@ const reducer = state => state;
 
 const store = createStore(reducer);
 
-export const getStore = ()=>store;
+export const getStore = () => store;
