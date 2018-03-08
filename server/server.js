@@ -4,17 +4,20 @@ import cors from 'cors';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
+import socketIO from 'socket.io';
 
 import webpackConfig from './../webpack.config';
 import { channels } from './db/Channel';
 import { users } from './db/User';
 import { getDefaultState } from './getDefaultState';
 import { initializeDB } from './db/initializeDB';
+import { simulateActivity } from './simulateActivityMessage';
 
 const compiler = webpack(webpackConfig);
 
 const app = express();
 const server = http.createServer(app);
+const io = socketIO(server);
 
 app.use(cors());
 app.use(
@@ -123,3 +126,5 @@ const port = 9000;
 server.listen(port, () => {
   console.info(`Redux Messenger is listening on port ${port}.`);
 });
+
+simulateActivity(currentUser.id);
