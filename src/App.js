@@ -18,7 +18,7 @@ export const App = () => (
           </a>
         </div>
       </div>
-    </nav>;
+    </nav>
     <div className='row'>
       <div className='col-xs-3'>
         <div>
