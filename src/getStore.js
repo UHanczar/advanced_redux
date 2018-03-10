@@ -7,7 +7,8 @@ import { getDefaultState } from './../server/getDefaultState';
 import { initializeDB } from './../server/db/initializeDB';
 import { reducer } from './reducers';
 import { createSocketMiddleware } from './socketMiddleware';
-import { RECEIVE_MESSAGE } from './actions/'; 
+import { RECEIVE_MESSAGE } from './actions/';
+import { getPreloadedState } from './getPreloadedState';
 
 const io = window.io;
 const socketConfigOut = {
@@ -24,10 +25,10 @@ const enhancer = compose(applyMiddleware(socketMiddleware, logger));
 
 initializeDB();
 
-const currentUser = users[0];
-const defaultState = fromJS(getDefaultState(currentUser));
+// const currentUser = users[0];
+// const defaultState = fromJS(getDefaultState(currentUser));
 
-const store = createStore(reducer, defaultState, enhancer);
+const store = createStore(reducer, getPreloadedState(), enhancer);
 
 const socketConfigIn = {
   NEW_MESSAGE: (data) => ({

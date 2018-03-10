@@ -12,6 +12,7 @@ import { users } from './db/User';
 import { getDefaultState } from './getDefaultState';
 import { initializeDB } from './db/initializeDB';
 import { simulateActivity } from './simulateActivityMessage';
+import { handleRender } from './serverRenderMiddleware';
 
 const compiler = webpack(webpackConfig);
 
@@ -119,8 +120,9 @@ app.use(
   }
 );
 
-app.use(express.static('public'));
+// app.use(express.static('public'));
 app.use(express.static('public/css'));
+app.use('/', handleRender(() => getDefaultState(currentUser)));
 
 const port = 9000;
 server.listen(port, () => {

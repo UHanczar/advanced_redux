@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 
 import { getStore } from './getStore';
 import { OFFLINE, updateStatus } from './actions';
@@ -7,7 +8,13 @@ import { App } from './App';
 
 const store = getStore();
 
-const Main = () => <App />;
+const Main = ({ state }) => (
+  <div>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </div>
+);
 
 const render = store => (
   ReactDOM.render(
