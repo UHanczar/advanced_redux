@@ -1,6 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
+import createSagaMiddleware from 'redux-saga';
 
 import { getDefaultState } from './../server/getDefaultState';
 import { initializeDB } from './../server/db/initializeDB';
@@ -8,6 +9,8 @@ import { reducer } from './reducers';
 import { createSocketMiddleware } from './socketMiddleware';
 import { RECEIVE_MESSAGE } from './actions/';
 import { getPreloadedState } from './getPreloadedState';
+import { initSagas } from './initSagas';
+import { currentUserStatusSaga } from './sagas';
 
 const io = window.io;
 const socketConfigOut = {
@@ -20,7 +23,8 @@ const socketMiddleware = createSocketMiddleware(io)(socketConfigOut);
 const logger = createLogger({
   stateTransformer: state => state.toJS()
 });
-const enhancer = compose(applyMiddleware(thunk, socketMiddleware, logger));
+const sagaMiddleware = createSagaMiddleware();
+const enhancer = compose(applyMiddleware(sagaMiddleware, thunk, socketMiddleware, logger));
 
 initializeDB();
 
@@ -44,3 +48,5 @@ Object.keys(socketConfigIn).map(key => {
 });
 // console.log('STORE', store.getState().toJS());
 export const getStore = () => store;
+
+initSagas(sagaMiddleware);
