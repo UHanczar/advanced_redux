@@ -2,16 +2,16 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
+import { persistState } from 'redux-devtools';
 
-import { getDefaultState } from './../server/getDefaultState';
 import { initializeDB } from './../server/db/initializeDB';
 import { reducer } from './reducers';
 import { createSocketMiddleware } from './socketMiddleware';
 import { RECEIVE_MESSAGE } from './actions/';
 import { getPreloadedState } from './getPreloadedState';
 import { initSagas } from './initSagas';
-import { currentUserStatusSaga } from './sagas';
 import { DevTools } from './components';
+import { getDebugSessionKey } from './utility'
 
 const io = window.io;
 const socketConfigOut = {
@@ -25,7 +25,7 @@ const logger = createLogger({
   stateTransformer: state => state.toJS()
 });
 const sagaMiddleware = createSagaMiddleware();
-const enhancer = compose(applyMiddleware(sagaMiddleware, thunk, socketMiddleware, logger), DevTools.instrument());
+const enhancer = compose(applyMiddleware(sagaMiddleware, thunk, socketMiddleware, logger), DevTools.instrument(), persistState(getDebugSessionKey()));
 
 initializeDB();
 
