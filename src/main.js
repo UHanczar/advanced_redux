@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { getStore } from './getStore';
 import { OFFLINE, updateStatus } from './actions';
 import { App } from './App';
+import { DevTools } from './components';
 
 const store = getStore();
 
@@ -20,6 +21,7 @@ const render = store => (
   ReactDOM.render(
     <div>
       <Main state={store.getState()} />
+      <DevTools store={store} />
     </div>, document.getElementById('root')));
 
 render(store);

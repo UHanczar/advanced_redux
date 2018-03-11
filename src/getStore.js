@@ -11,6 +11,7 @@ import { RECEIVE_MESSAGE } from './actions/';
 import { getPreloadedState } from './getPreloadedState';
 import { initSagas } from './initSagas';
 import { currentUserStatusSaga } from './sagas';
+import { DevTools } from './components';
 
 const io = window.io;
 const socketConfigOut = {
@@ -24,7 +25,7 @@ const logger = createLogger({
   stateTransformer: state => state.toJS()
 });
 const sagaMiddleware = createSagaMiddleware();
-const enhancer = compose(applyMiddleware(sagaMiddleware, thunk, socketMiddleware, logger));
+const enhancer = compose(applyMiddleware(sagaMiddleware, thunk, socketMiddleware, logger), DevTools.instrument());
 
 initializeDB();
 
